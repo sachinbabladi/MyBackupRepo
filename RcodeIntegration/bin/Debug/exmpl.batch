@@ -1,0 +1,23 @@
+> args <- commandArgs(trailingOnly = TRUE)
+> print(args)
+[1] "2010-01-28" "example"    "100"       
+> # trailingOnly=TRUE means that only your arguments are returned, check:
+> # print(commandsArgs(trailingOnly=FALSE))
+> 
+> start_date <- as.Date(args[1])
+> name <- args[2]
+> n <- as.integer(args[3])
+> rm(args)
+> 
+> # Some computations:
+> x <- rnorm(n)
+> png(paste(name,".png",sep=""))
+> plot(start_date+(1L:n), x)
+> dev.off()
+null device 
+          1 
+> 
+> summary(x)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-1.985000 -0.556000  0.022330 -0.004841  0.540700  1.691000 
+> 
