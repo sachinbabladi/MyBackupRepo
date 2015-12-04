@@ -1,0 +1,327 @@
+﻿@model NOCMvc.ViewModels.VMUnprocessedEmail
+
+@{
+    ViewBag.Title = "Unparsed Email List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //var form = document.getElementById("frmList");
+       
+        $("#createview").hide(1);
+        $("#updateview").hide(1);
+        $("#discardview").hide(1);
+        //$("#emailpreview").width($("#previewmail").width());
+        $("#emailpreview").height($("#previewmail").height() - 5);
+       
+        $("#btnCreate").click(function (e) {
+            //LoadView("Url.Action("Create")", e);
+
+            $("#updateview").hide(1);
+            $("#discardview").hide(1);
+            $("#createview").show(1);
+            $("createview").css("style", "display:block");
+            window.scroll(0, 500);
+            return;
+            //$("#performaction").html("");
+            //$("#performaction").load(url, null, function ()
+            //{
+            //    alert("loaded");
+            //});
+
+        });
+
+        $("#btnUpdate").click(function (e) {
+            //LoadView("Url.Action("Update")", e);
+            $("#createview").hide(1);
+            $("#discardview").hide(1);
+            $("#updateview").show(1);
+            window.scroll(0, 500);
+            return;
+        });
+
+        $("#btnDiscard").click(function (e) {
+            //LoadView("Url.Action("Discard")", e);
+            $("#createview").hide(1);
+            $("#updateview").hide(1);
+            $("#discardview").show(1);
+            window.scroll(0, 500);
+            return;
+        });
+
+        //document.getElementById("btnDiscard").addEventListener("click", function (e) {
+        //    e.preventDefault();
+        //    form.method = "get";
+        //    form.action = "Discard";
+        //    form.submit();
+        //});
+
+        $(".k-link").css('color', 'white');
+
+    }
+   );
+
+    function LoadView(action, e) {
+        e.preventDefault();
+        if ($('input[name=ID]:checked').length == 0) {
+            alert("Select an Item to proceed by clicking radio button.");
+            return;
+        }
+        $("#performaction").html("");
+        //var url = '';
+        /*$.ajax({
+            url: action,
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            datatype: 'html',
+            success: function (result) {
+                $("#performaction").html(result);
+
+            },
+            error: function (status) {
+                alert(status);
+
+            }
+        });*/
+        $("#createview").hide(1);
+
+        //$(":hidden").val('');
+        //form.method = "get";
+        //form.action = action;
+        //form.submit();
+    }
+
+    function onDataBound() {
+        //debugger;
+        var element = $("input:radio[name='ID']:first");
+        if (element != null) {
+            element.attr('checked', 'true');
+            ShowDetails(element.val());
+        }
+        var grid = this;
+        var dataItem;
+
+        $("[name='ID']").change(function (e) {
+            //debugger;
+            var row = $(e.target).closest("tr");
+            dataItem = grid.dataItem(row);
+            //grid.select(row);
+            //alert(dataItem.ID);
+            $.ajax({
+                url: 'SetItemId',
+                type: "POST",
+                data: { 'Id': dataItem.ID },
+                //dataType: "json",
+                //contentType: "application/json",
+                success: function (data) {
+                    //alert(data);
+                },
+                error: function (data) {
+                    alert('error:' + data);
+                }
+            });
+            ShowDetails(dataItem.ID);
+        });
+    }
+
+    function ShowDetails(ID) {
+
+        $.getJSON("GetEmailBody", { 'Id': ID }, function (data) {
+            //$("#emaildetails").text(data);
+            $("#emailpreview").html(data);
+            $("#emailpreview").css("overflow-y", "auto");
+            $("#emailpreview").css("overflow-x", "auto");
+            //$("#emailpreview").val(data);
+            //document.getElementById("emailpreview").innerText = data;
+            //$("#emaildetails").dialog({
+            //    width: 700,
+            //    height: 400,
+            //    modal: true
+            //});
+        });
+
+        $.getJSON("GetString", { 'Id': ID }, function (data) {
+            alert(data);
+        });
+    }
+</script>
+@{
+    if (ViewBag.TicketId != null)
+    {
+
+        if (ViewBag.IsUpdated != null)
+        {
+            <script type="text/javascript">
+                $(document).ready(function () {
+
+                    alert('Ticket updated successfully');
+                })
+            </script>
+        }
+        else
+        {
+            <script type="text/javascript">
+                $(document).ready(function () {
+
+                    alert('Ticket created successfully, ticket id is ' + '@ViewData["TicketId"]');
+                })
+            </script>
+        }
+    }
+
+    if (ViewData["Discarded"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                alert('@ViewData["Discarded"]');
+            })
+        </script>
+    }
+
+    if (ViewData["exception"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                alert('Exception occurred while processing, error message as follows: ' + '@ViewData["exception"]');
+            })
+        </script>
+    }
+}
+<style type="text/css">
+    .textsetting {
+        font-size: 1.4em;
+        font-family: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    .title {
+        font-size: 20px;
+        font-family: Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    td {
+        vertical-align: top;
+    }
+
+</style>
+
+<h2>Unparsed Email List</h2>
+<!DOCTYPE>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Email Processing</title>
+</head>
+
+<body>
+    @*<form action="Create" method="get" id="frmList">*@
+    <table style="width: 100%;" cellpadding="0" cellspacing="0">
+
+        <tr>
+
+            <td style="text-align:right;border:1px solid" width="50%" height="530">
+               
+                @(Html.Kendo().Grid<NOCEntities.UnprocessedEmail>()
+                                                      .Name("grid")
+                                                      .Events(e => e.DataBound("onDataBound"))
+                                                      .Selectable(select => select.Enabled(false))
+                                                      .Columns(c =>
+                                                      {
+                                                          c.Bound(e => e.ID).ClientTemplate("<input type='radio' name='ID' value='#= ID #' id='radioID' />").Width(50).HeaderHtmlAttributes(new { style = "FONT-WEIGHT: bolder;FONT-SIZE: 8pt;COLOR: #ffffff;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;text:Select;" }).HtmlAttributes(new { style = "text-align:center;vertical-align:top;" }).Title("").Sortable(false).Filterable(false);
+                                                          c.Bound(e => e.Date).HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR:white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;", @class = "headlabel" }).Width(180);
+                                                          c.Bound(e => e.FromEmail).HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR:white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;", @class = "headlabel" }).Width(230).Sortable(false).Filterable(false);
+                                                          //c.Bound(e => e.EmailSubject).HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR: white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;", @class = "headlabel" });
+                                                          //c.Bound(e => e.EmailBody).ClientTemplate("<a href='javascript:' id='details' onclick='ShowDetails(\"hiddenbody_#= ID #\")'>body</a>").
+                                                          //c.Bound(e => e.ID).ClientTemplate("<a href='javascript:' id='details' onclick='ShowDetails(\"#= ID #\")'>body</a>").
+                                                          //   HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR:white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;", @class = "headlabel" }).Title("Email Body");
+                                                          c.Bound(e => e.ToAddress).HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR:white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;", @class = "headlabel" }).Width(260).Sortable(false).Filterable(false);
+                                                          c.Bound(e => e.CCAddress).HeaderHtmlAttributes(new { style = "text-align:left;FONT-WEIGHT: bolder;FONT-SIZE: 9pt;COLOR:white;FONT-FAMILY: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;BACKGROUND-COLOR: #3366cc;" }).HtmlAttributes(new { style = "text-align:left;vertical-align:top;wrap", @class = "headlabel" }).Width(260).Sortable(false).Filterable(false);
+                                                          //c.Bound(e => e.Allocated1).ClientTemplate("<a data-ajax='true' onclick='GetAlertDetails(#= ID#,\"Allocated1\");' href='_'>#= Allocated1#</a>").Title("Allocated").Filterable(false);
+
+                                                      })
+                                        .Pageable()
+                                        .Resizable(x => x.Columns(true))
+                                        .Sortable()
+                                        .Scrollable()
+                                          //.Filterable(filterable => filterable
+                                          //  .Extra(false)
+                                          //   .Operators(operators => operators
+                                          //      .ForString(str => str.Clear()
+                                          //          .Contains("Contains")
+                                          //          //.DoesNotContain("Does Not Contain")
+                                          //          .StartsWith("Starts with")
+                                          //       //.IsEqualTo("Is equal to")
+                                          //       //.IsNotEqualTo("Is not equal to")
+                                          //      )))
+                        .HtmlAttributes(new { style = "height: 525px; width: 670px;", cellpadding = "0",cellspacing = "0" })
+                                        .Reorderable(r => r.Columns(true))
+                                        .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .ServerOperation(false)
+                                                .Read(read => { read.Action("List", "EmailProcessing"); })
+                                            .PageSize(10)
+                                                    .Model(model =>
+                                                    {
+                                                        model.Id(ctx => ctx.ID);
+                                                    })
+                        //.Update(update => update.Action("Update", "TicketPrioritization"))
+
+                                        )
+                )
+
+               
+            </td>
+
+            <td style="text-align:left;height:510px !important;width:600px;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;" @*width="50%"*@ id="previewmail" height="500">
+                <div id="emailpreview" style="width:650px;height:510px;border-right:1px solid #e6e6e6;border-top:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6"></div>
+                @*<textarea id="emailpreview" style="width: 600px; height: 500px;"></textarea>*@
+            </td>
+
+        </tr>
+        <tr>
+            <td style="text-align: center;padding-top: 10px;padding-right: 30px" colspan="2">
+                <input type="button" class="button" id="btnCreate" value="Create Ticket..." />
+                <input type="button" class="button" id="btnUpdate" value="Update Existing Ticket..." />
+                <input type="button" class="button" id="btnDiscard" value="Discard..." />
+            </td>
+        </tr>
+        <tr>
+            <td id="createview" style="width:100%;text-align:center;display:none" colspan="2">
+
+                @Html.Partial("Create", Model.ticketForEmail);
+
+            </td>
+
+        </tr>
+        <tr>
+            <td id="updateview" style="width:100%;text-align:center;display:none" colspan="2">
+
+                @Html.Partial("Update", Model.ticketForEmail);
+
+            </td>
+
+        </tr>
+        <tr>
+            <td id="discardview" style="width:100%;text-align:center;display:none" colspan="2">
+
+                @Html.Partial("Discard");
+
+            </td>
+
+        </tr>
+    </table>
+    @*</form>*@
+    <div id="emaildetails"></div>
+</body>
+
+
+</html>

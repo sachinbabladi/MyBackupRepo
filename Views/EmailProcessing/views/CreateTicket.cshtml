@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "CreateTicket";
+}
+
+<h2>Create Ticket</h2>
+<table style="width: 100%;">
+    <tr>
+        <td class="auto-style1">
+            MSP Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Label ID="Label8" Text=""></asp:Label>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td class="auto-style2">
+            MSP Site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<asp:DropDownList ID="dropdownSite"DataSourceID="" Width="300px"></asp:DropDownList>
+        </td>
+    </tr>
+    <tr>
+        <td class="auto-style3">
+            Resource&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <asp:Label ID="Label7" Text=""></asp:Label>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="Label6" Text="Label"></asp:Label>
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Ticket Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+            <asp:DropDownList ID="DropDownListTickettype" DataSourceID="" OnSelectedIndexChanged="DropDownListTickettype_SelectedIndexChanged" Width="299px" style="margin-left: 0px"></asp:DropDownList>
+            <br />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="vertical-align:top">
+                Email Subject&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span><asp:TextBox ID="txtSubject" Width="486px"></asp:TextBox>
+            <br />
+            <br />
+            <span style="vertical-align:top">
+                Email Body&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span><textarea ID="txtBody"></textarea>
+            <br />
+            <br />
+            <span style="vertical-align:top">
+                Ticket Priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span><asp:DropDownList ID="DropDownListTicketPriority" DataSourceID="" OnSelectedIndexChanged="DropDownListTicketPriority_SelectedIndexChanged" Width="327px"></asp:DropDownList>
+            <br />
+            <br />
+            <span style="vertical-align:top">
+                Assign To Group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span><asp:DropDownList ID="DropDownListTicketGroup" DataSourceID="" OnSelectedIndexChanged="DropDownListTicketGroup_SelectedIndexChanged" Width="326px"></asp:DropDownList>
+            <br />
+            <br />
+            <span style="vertical-align:top">
+                Assign To User&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span><asp:DropDownList ID="DropDownListTicketUser" DataSourceID="" OnSelectedIndexChanged="DropDownListTicketUser_SelectedIndexChanged" Width="333px"></asp:DropDownList>
+        </td>
+    </tr>
+
+    <tr style="text-align: right">
+        <td>
+            <input id="btnSubmit" type="submit" value="Create Ticket" />
+
+        </td>
+    </tr>
+</table>

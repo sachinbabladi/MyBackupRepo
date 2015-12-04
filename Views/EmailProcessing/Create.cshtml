@@ -1,0 +1,263 @@
+﻿@model NOCEntities.TicketForUnparsedMail
+
+@{
+    ViewBag.Title = "Create Ticket for unparsed Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style type="text/css">
+    .textsetting {
+        font-size: 11px;
+        font-family: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    .title {
+        font-size: 20px;
+        font-family: Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    td {
+        padding: 5px 5px 7px 7px;
+        vertical-align: top;
+    }
+</style>
+
+<h2>Create Ticket for unparsed Email</h2>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#UnParsedEmailBody").width(600).height(200);
+        $(':text').width(300);
+        $("#txtSrch").width(150);
+        $("#FamilyName").width(300);
+        $("#TicketType").width(300);
+        $("#TicketPriority").width(300);
+        $("#AssignTo").width(300);
+        $("#AssignToUser").width(300);
+        $("#MSPSite").width(300);
+        $("#emptylist").width(300);
+        //$("#btnSrch").click(function () {
+        //    var text = $("#txtSrch").val();
+
+        //    $.ajax({
+        //        url: '/EmailProcessing/SearchMSP',
+        //        type: "POST",
+        //        data: { 'searchStr': text },
+        //        //dataType: "json",
+        //        //contentType: "application/json",
+        //        success: function (data) {
+        //            $("#MSPName").text = data.text;
+        //        },
+        //        error: function (data) {
+        //            alert('error:' + data);
+        //        }
+        //    });
+
+
+        //})
+    });
+</script>
+<form action="SearchMSP" method="post">
+    <table style="width: 100%;" align="center" class="textsetting" border="0">
+        <tr>
+            <td width="12%" valign="bottom">
+                MSP Name
+            </td>
+            <td width="20%" align="left" style="padding-left:17px" valign="bottom">
+                @if (!String.IsNullOrEmpty(Model.MSPName))
+                {
+
+                    @Html.TextBoxFor(model => model.MSPName, new { @disabled = "true" })
+
+                }
+                else
+                {
+
+                    @Html.TextBox("empty", null, new { @disabled = "true" })
+
+                }
+                @*</td>
+                    <td align="left" style="padding-left:90px" valign="bottom">*@
+                Search MSP &nbsp;<input type="text" name="txtSrch" id="txtSrch" />%&nbsp;
+                <input type="submit" id="btnSrch" class="button" value="Go" />
+            </td>
+        </tr>
+    </table>
+</form>
+<form action="Create" method="post">
+    @Html.HiddenFor(model => model.MSPName, new { @name = "MSPName" })
+    <table style="width: 100%;" align="center" class="textsetting">
+
+        <tr>
+            <td align="right">
+                MSP Site
+            </td>
+            <td>
+                @{
+                    SelectList listSites = null;
+                    List<SelectListItem> lstItems = new List<SelectListItem>() { new SelectListItem { Text = "<--Select-->", Value = "<--Select-->" } };
+                    if (Model.listSites != null)
+                    {
+                        listSites = new SelectList(Model.listSites, "Value", "Key");
+                        @Html.DropDownListFor(model => model.MSPSite, listSites)
+                    }
+                    else
+                    {
+                        if (ViewData["emptylist"] == null)
+                        {
+                            ViewData["emptylist"] = lstItems;
+                        }
+                        @Html.DropDownList("emptylist")
+                    }
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right">
+                Resource
+            </td>
+
+            @if (!String.IsNullOrEmpty(Model.Resource))
+            {
+                <td>
+                    @Html.TextBoxFor(model => model.Resource, new { @disabled = "true" })
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.TextBox("emptyLabel", null, new { @disabled = "true" })
+                </td>
+            }
+        </tr>
+        <tr>
+            <td align="right">
+                Family Name
+            </td>
+
+            <td>
+                @Html.DropDownListFor(model => model.FamilyName, new SelectList(Model.listCategory, "Value", "Key"))
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                Ticket Type
+            </td>
+
+            <td>
+
+                @{
+                    List<SelectListItem> listServiceReq = new List<SelectListItem>();
+                    listServiceReq.Add(new SelectListItem
+                         {
+                             Text = "Service Request",
+                             Value = "ServiceRequest"
+                         });
+
+                }
+                @Html.DropDownListFor(model => model.TicketType, listServiceReq)
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right">
+                Subject
+            </td>
+
+            <td>
+                @Html.TextBoxFor(model => model.UnParsedEmailSubject)
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right">
+                Description
+            </td>
+
+            <td>
+                @Html.TextAreaFor(model => model.UnParsedEmailBody)
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right">
+                Priority
+            </td>
+
+            <td>
+                @{
+                    List<SelectListItem> listpriority = new List<SelectListItem>();
+                    listpriority.Add(new SelectListItem
+                         {
+                             Text = "Emergency",
+                             Value = "1"
+                         });
+                    listpriority.Add(new SelectListItem
+                    {
+                        Text = "Medium",
+                        Value = "2"
+                    });
+                    listpriority.Add(new SelectListItem
+                    {
+                        Text = "Low",
+                        Value = "3"
+                    });
+                }
+
+
+                @Html.DropDownListFor(model => model.TicketPriority, listpriority)
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                Assign To
+            </td>
+            <td>
+                @{
+                    List<SelectListItem> listGrp = new List<SelectListItem>();
+                    listGrp.Add(new SelectListItem
+                         {
+                             Text = "NOC Team",
+                             Value = "NOC Team"
+                         });
+
+                }
+                @Html.DropDownListFor(model => model.AssignTo, listGrp)
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                Assign To Group
+            </td>
+            <td>
+                @{
+                    List<SelectListItem> listItems = new List<SelectListItem>();
+                    listItems.Add(new SelectListItem
+                         {
+                             Text = "SRT",
+                             Value = "23"
+                         });
+
+                }
+
+
+                @Html.DropDownListFor(model => model.AssignToUser, listItems)
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3" style="padding-left:150px">
+                <p>
+                    <input type="submit" id="submit" value="Create Ticket" class="button" />
+                </p>
+            </td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Discard Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtDiscardReason").width(600).height(150);
+    });
+</script>
+
+
+<style type="text/css">
+    .textsetting {
+        font-size: 13px;
+        font-family: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    .title {
+        font-size: 20px;
+        font-family: Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    td {
+        padding: 5px 5px 7px 7px;
+        vertical-align: top;
+    }
+</style>
+
+<h2 style="padding-left:40px">Discard Email</h2>
+<body>
+    <form id="form1" action="Discard" method="post" >
+        <table style="width: 100%;padding-left:150px;" class="textsetting" border="0">
+            <tr>
+                <td width="15%" align="right" style="padding-right:15px">
+                    Discard Reason:
+
+                </td>
+
+                <td width="80%">
+                    @*<textarea id="txtDiscardReason" name="txtDiscardReason"></textarea>*@
+                    @Html.TextArea("txtDiscardReason")
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" style="padding-left:100px">
+                    <br />
+                    <input id="btnDiscard" type="Submit" value="Discard Email" class="button" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+

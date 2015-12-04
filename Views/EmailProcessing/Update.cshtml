@@ -1,0 +1,190 @@
+﻿@model NOCEntities.TicketForUnparsedMail
+
+@{
+    ViewBag.Title = "Update Existing Ticket for unparsed Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<style type="text/css">
+    .textsetting {
+        font-size: 11px;
+        font-family: Tahoma, Verdana, 'Microsoft Sans Serif', Arial;
+        margin-bottom: 10px;
+        color:black;
+        background-color: white;
+    }
+
+    .title {
+        font-size: 20px;
+        font-family: Arial;
+        margin-bottom: 10px;
+        color: black;
+        background-color: white;
+    }
+
+    td {
+        padding: 5px 5px 7px 7px;
+        vertical-align: top;
+    }
+</style>
+<h2 >Update Existing Ticket for unparsed Email</h2>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        $("#TicketDescription").width(600).height(150);
+        $("#TicketNotes").width(600).height(150);
+        $("#UnParsedEmailBody").width(600).height(150);
+        $(':text').width(300);
+        $("#tktidtext").width(150);
+        //$("#tktidtext").keydown(function (event) {
+        //    if (event.keyCode < 48 || event.keyCode > 57) {
+                
+        //        $("#tktidtext").val('');
+        //        return;
+        //    }
+        //});
+        $("#tktidtext").autocomplete({
+            source: function (request, response) {
+                $.get("GetTicketIdList", {
+                    ticketId: $("#tktidtext").val()
+                }, function (data) {
+                   response(data);
+                });
+            },
+            minLength: 1
+        });
+        $("#tktidtext").keyup(function (event) {
+            //if (event.keyCode < 48 || event.keyCode > 57) {
+            //    $("#tktidtext").val('');
+            //    return;
+            //}
+        //    $.ajax({
+        //        url: 'GetTicketIdList',
+        //        type: "GET",
+        //        data: { 'ticketId': $("#tktidtext").val() },
+        //        //dataType: "json",
+        //        contentType: "application/json",
+        //        success: function (data) {
+                   
+        //        },
+        //        error: function (data) {
+        //            alert('error:' + data);
+        //        }
+        //    });
+        //    //alert(data);
+        //});
+        //$("#tktidtext").autocomplete({ source: ["test", "test1", "test2"] });
+        //$("#tktidtext").val (event.type + ": " + event.keyCode);
+        });
+    });
+</script>
+
+<form action="SearchTicket" method="post">
+    <table style="width: 100%;padding-left:150px;" class="textsetting" border="0">
+
+        <tr>
+            <td align="left" width="20%">
+                NOC Ticket Id
+            </td>
+            <td width="20%">
+                @Html.TextBoxFor(model => model.TicketId,new {@disabled="true"})
+            </td>
+            <td align="left" style="padding-left:30px">
+                Search Ticket Id &nbsp;
+
+                <input type="text" name="tktidtext" id="tktidtext" />
+                <input type="submit" id="btnSrch" class="button" value="Go" />
+            </td>
+        </tr>
+    </table>
+</form>
+<form action="Update" method="post">
+    <table style="width: 100%;padding-left:150px;" class="textsetting" border="0">
+        @Html.HiddenFor(model => model.TicketId)
+
+        <tr>
+            <td width="20%">
+                MSP Name
+            </td>
+
+
+            <td align="left" valign="bottom">
+                @Html.TextBoxFor(model => model.MSPName, new { @disabled = "true" })
+            </td>
+            @*else
+                {
+                    <td align="left" valign="bottom">
+                        @Html.TextBox("empty", null, new { @disabled = "true" })
+                    </td>
+                }*@
+        </tr>
+
+        <tr>
+            <td width="20%">
+                MSP Site
+
+            </td>
+            @*@{
+                SelectList listSites = null;
+                if (Model.listSites != null)
+                {
+                    listSites = new SelectList(Model.listSites, "Value", "Key");
+                    @Html.DropDownListFor(model => model.MSPSite, listSites)
+                }*@
+            <td align="left" valign="bottom">
+                @Html.TextBoxFor(model => model.MSPSite, new { @disabled = "true" })
+            </td>
+
+        </tr>
+
+        <tr>
+            <td width="20%">
+                Ticket Subject
+            </td>
+
+            <td width="80%" align="left" valign="bottom">
+                @Html.TextBoxFor(model => model.TicketSubject, new { @disabled = "true" })
+            </td>
+        </tr>
+        <tr>
+            <td width="20%">
+                Ticket Description
+
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.TicketDescription, new { @disabled = "true" })
+            </td>
+        </tr>
+
+        <tr>
+            <td width="20%">
+                Ticket Notes
+            </td>
+            <td>
+                @Html.TextAreaFor(model => model.TicketNotes, new { @disabled = "true" })
+            </td>
+        </tr>
+
+        <tr>
+            <td width="20%">
+                New Ticket Notes
+            </td>
+
+            <td>
+                @Html.TextAreaFor(model => model.UnParsedEmailBody)
+            </td>
+        </tr>
+
+        <tr>
+            <td align="center" colspan="2" style="padding-left:250px">
+                <p>
+                    <input type="submit" id="submit" value="Update Ticket" class="button" />
+                </p>
+            </td>
+        </tr>
+    </table>
+</form>
